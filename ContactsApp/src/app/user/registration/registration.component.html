@@ -1,0 +1,75 @@
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="row" style="height: 450px;">
+        <div class="col-md-12 my-auto side-header">
+            <h1>User Registration</h1>
+        </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <form [formGroup]="service.formModel" (submit)="onSubmit()">
+            <div class="form-group">
+                <label>Name</label>
+                <input class="form-control" formControlName="Name">
+            </div>
+            <div class="form-group">
+                <label>Surname</label>
+                <input class="form-control" formControlName="Surname">
+            </div>
+            <div class="form-group required">
+                <label>Email</label>
+                <input class="form-control" formControlName="Email">
+                @if(service.formModel.get('Email')?.touched && service.formModel.get('Email')?.errors?.['required']){
+                    <label class="text-danger">Pole nie może być puste.</label>
+                  }
+                @else if(service.formModel.get('Email')?.touched && service.formModel.get('Email')?.errors?.['email']){
+                    <label class="text-danger">Podano zły adres email.</label>
+                }
+            </div>
+            <div formGroupName="Passwords"> 
+                <div class="form-group required">
+                    <label>Password</label>
+                    <input type="password" class="form-control" formControlName="Password">
+                  @if(service.formModel.get('Passwords.Password')?.touched && service.formModel.get('Passwords.Password')?.errors?.['required']){
+                    <label class="text-danger">Pole nie może być puste.</label>
+                  }
+                  @else if (service.formModel.get('Passwords.Password')?.touched && service.formModel.get('Passwords.Password')?.errors?.['minlength']) {
+                    <label class="text-danger">Hasło musi zawierać conajmniej 6 znaków.</label>
+                  }
+                </div>
+                <div class="form-group required">
+                    <label>Confirm Password</label>
+                    <input type="password" class="form-control" formControlName="ConfirmPassword">
+                    @if(service.formModel.get('Passwords.ConfirmPassword')?.touched && service.formModel.get('Passwords.ConfirmPassword')?.errors?.['required']){
+                        <label class="text-danger">Pole nie może być puste.</label>
+                    }
+                    @else if(service.formModel.get('Passwords.ConfirmPassword')?.touched && service.formModel.get('Passwords.ConfirmPassword')?.errors?.['passwordMismatch']){
+                        <label class="text-danger" >Hasła nie pasują do siebie.</label>
+                    }
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Category</label>
+                <input class="form-control" formControlName="Category">
+            </div>
+            <div class="form-group">
+                <label>SubCategory</label>
+                <input class="form-control" formControlName="SubCategory">
+            </div>
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input class="form-control" formControlName="PhoneNumber">
+            </div>
+            <div class="form-group">
+                <label>Birth Date</label>
+                <input class="form-control" formControlName="BirthDate">
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-8 offset-md-2">
+                  <button type="submit" class="btn btn-lg btn-block" [disabled]="!service.formModel.valid">Sign Up</button>
+                </div>
+              </div>
+        </form>
+    </div>
+</div>
