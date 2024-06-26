@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../shared/user.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive],
   templateUrl: './home.component.html',
   styles: ``
 })
@@ -14,6 +14,7 @@ export class HomeComponent implements OnInit {
   accountDetails: any;
   constructor(private service: UserService, private router: Router) { }
 
+  //uzyskiwanie informacji o koncie i przekazywanie tego do html
   ngOnInit(): void {
     this.service.getAccountDetail().pipe(
       tap(

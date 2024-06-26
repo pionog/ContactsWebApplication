@@ -20,14 +20,14 @@ export class LoginComponent implements OnInit{
 
   ngOnInit() {
     if (localStorage.getItem('token') != null)
-      this.router.navigateByUrl('/home');
+      this.router.navigateByUrl('/home'); //jesli jest token w localstorage, to 
   }
 
   onSubmit(form: NgForm) {
     this.service.login(form.value).subscribe(
       (res: any) => {
-        localStorage.setItem('token', res.token);
-        this.router.navigateByUrl('/home');
+        localStorage.setItem('token', res.token); //zapisanie tokena w localstorage
+        this.router.navigateByUrl('/home'); //przejscie do podstrony home
       },
       err => {
         console.log(err);
