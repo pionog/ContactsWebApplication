@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { UserService } from '../../shared/user.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { catchError, of, tap } from 'rxjs';
 
 @Component({
   selector: 'app-registration',
@@ -14,26 +15,31 @@ import { HttpClientModule } from '@angular/common/http';
 export class RegistrationComponent {
   constructor(public service: UserService){}
 
+
   onSubmit() {
-    this.service.register().subscribe(
-      (res: any) => {
+    this.service.register().pipe(
+      tap((res: any) => {
         if (res.succeeded) {
           this.service.formModel.reset();
-        } else {
-          res.errors.forEach((element: { code: any; }) => {
+        }
+        else {
+          res.errors?.forEach((element: { code: any; }) => {
             switch (element.code) {
-              case 'DuplicateUserName':
+              case 'DuplicateEmail':
+                console.log('Duplicate email');
                 break;
 
               default:
+                console.log('Other error');
                 break;
             }
           });
         }
-      },
-      err => {
+      }),
+      catchError(err => {
         console.log(err);
-      }
-    );
+        return of(null);
+      })
+    ).subscribe();
   }
 }

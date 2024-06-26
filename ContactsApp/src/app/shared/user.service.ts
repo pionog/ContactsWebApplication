@@ -16,7 +16,7 @@ export class UserService {
       Surname: [''],
       Email: ['', [Validators.required, Validators.email]],
       Passwords: this.fb.group({
-        Password: ['', [Validators.required, Validators.minLength(4)]],
+        Password: ['', [Validators.required, Validators.minLength(6)]],
         ConfirmPassword: ['', Validators.required]
       },{validator: this.comparePasswords}),
       Category: [''],
@@ -48,6 +48,14 @@ export class UserService {
       phoneNumber: this.formModel.value.PhoneNumber,
       birthDate: this.formModel.value.BirthDate,
     };
-    return this.http.post(environment.apiBaseUrl + '/AccountDetail', body);
+    return this.http.post(environment.apiBaseUrl + '/AccountDetail/Registration', body);
+  }
+
+  login(formData: any) {
+    return this.http.post(environment.apiBaseUrl + '/AccountDetail/Login', formData);
+  }
+
+  getUserProfile() {
+    return this.http.get(environment.apiBaseUrl + '/UserProfile');
   }
 }
