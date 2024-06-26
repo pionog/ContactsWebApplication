@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../shared/user.service';
 import { Router } from '@angular/router';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -14,14 +15,12 @@ export class HomeComponent implements OnInit {
   constructor(private service: UserService, private router: Router) { }
 
   ngOnInit(): void {
-    this.service.getAccountDetail().subscribe(
-      (res) => {
-        this.accountDetails = res;
-      },
-      (err) => {
-        console.log(err);
-      },
-    );
+    this.service.getAccountDetail().pipe(
+      tap(
+        (res) => this.accountDetails = res,
+        (err) => console.log(err)
+      )
+    ).subscribe();
   }
   
 

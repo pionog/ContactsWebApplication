@@ -25,9 +25,9 @@ export class RegistrationComponent {
         else {
           res.errors?.forEach((element: { code: any; }) => {
             switch (element.code) {
-              case 'DuplicateEmail':
-                console.log('Duplicate email');
-                break;
+                case 'DuplicateEmail':
+                  console.log('Duplicate email');
+                  break;
 
               default:
                 console.log('Other error');

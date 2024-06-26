@@ -21,7 +21,7 @@ namespace ContactsWebApplication.Controllers
         [Route("GetAccountDetail")]
         public async Task<Object> GetUserProfile()
         {
-            var email = User.Claims.First(c => c.Type == ClaimTypes.Email).Value;
+            var email = User.Claims.First(c => c.Type == "Email").Value;
             var accountDetail = await _authService.GetAccountDetail(email);
             return Ok(accountDetail);
         }

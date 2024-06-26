@@ -42,11 +42,11 @@ public class AuthService : IAuthService
         var key = Encoding.ASCII.GetBytes(_appSettings.JWT_Secret);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new Claim[]
-            {
+            Subject = new ClaimsIdentity(
+            [
                 new Claim(ClaimTypes.Name, user.AccountID.ToString()),
                 new Claim(ClaimTypes.Email, user.Email)
-            }),
+            ]),
             Expires = DateTime.UtcNow.AddDays(1),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
