@@ -19,16 +19,10 @@ namespace ContactsWebApplication.Controllers
         [Authorize]
         [HttpGet]
         [Route("GetAccountDetail")]
-        public async Task<IActionResult> GetAccountDetail()
+        public async Task<Object> GetUserProfile()
         {
-            var email = User.Claims.First(c => c.Type == ClaimTypes.Email).Value;
+            var email = User.Claims.First(c => c.Type == "Email").Value;
             var accountDetail = await _authService.GetAccountDetail(email);
-
-            if (accountDetail == null)
-            {
-                return NotFound();
-            }
-
             return Ok(accountDetail);
         }
     }

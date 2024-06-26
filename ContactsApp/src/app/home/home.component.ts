@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../shared/user.service';
+import { Router } from '@angular/router';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -9,22 +11,21 @@ import { UserService } from '../shared/user.service';
   styles: ``
 })
 export class HomeComponent implements OnInit {
-
-  constructor(private service: UserService) { }
+  accountDetails: any;
+  constructor(private service: UserService, private router: Router) { }
 
   ngOnInit(): void {
-    this.service.getUserProfile().subscribe(
-      (res) => {
-        this.userDetails = res;
-      },
-      (err) => {
-        console.log(err);
-      },
-    );
+    this.service.getAccountDetail().pipe(
+      tap(
+        (res) => this.accountDetails = res,
+        (err) => console.log(err)
+      )
+    ).subscribe();
   }
-  userDetails: any;
+  
 
   onLogout() {
-
+    localStorage.removeItem('token');
+    this.router.navigateByUrl('/user/login');
   }
 }

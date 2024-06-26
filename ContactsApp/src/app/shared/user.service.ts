@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment.development';
+import { Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -52,10 +53,18 @@ export class UserService {
   }
 
   login(formData: any) {
-    return this.http.post(environment.apiBaseUrl + '/AccountDetail/Login', formData);
+    return this.http.post(environment.apiBaseUrl + '/AccountDetail/Login', formData).pipe(
+      tap((res: any) => {
+        localStorage.setItem('token', res.token);
+      })
+    );
   }
 
-  getUserProfile() {
-    return this.http.get(environment.apiBaseUrl + '/UserProfile');
+  getAccountDetail(): Observable<any> {
+    return this.http.get(environment.apiBaseUrl + '/UserProfile/GetAccountDetail', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    });
   }
 }

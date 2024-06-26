@@ -39,6 +39,7 @@ builder.Services.AddAuthentication(x =>
 });
 
 builder.Services.Configure<ApplicationSettings>(builder.Configuration.GetSection("ApplicationSettings"));
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddDbContext<AccountDetailContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection")));

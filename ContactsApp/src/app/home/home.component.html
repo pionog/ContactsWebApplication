@@ -2,12 +2,16 @@
     <a class="navbar-brand text-white">JWT Auth System</a>
     <button class="btn btn-danger my-2 my-sm-0" (click)="onLogout()">Logout</button>
 </nav>
-  @if(userDetails){
+  @if(accountDetails){
     <div class="card m-5" style="width:18rem">
         <ul class="list-group">
-        <li class="list-group-item"><strong>Name : </strong>{{userDetails.Name}}</li>
-        <li class="list-group-item"><strong>Surname : </strong>{{userDetails.Surname}}</li>
-        <li class="list-group-item"><strong>Email : </strong>{{userDetails.Email}}</li>
+        <li class="list-group-item"><strong>Name : </strong>{{accountDetails.name}}</li>
+        <li class="list-group-item"><strong>Surname : </strong>{{accountDetails.surname}}</li>
+        <li class="list-group-item"><strong>Email : </strong>{{accountDetails.email}}</li>
+        <li class="list-group-item"><strong>Category : </strong>{{accountDetails.category}}</li>
+        <li class="list-group-item"><strong>SubCategory : </strong>{{accountDetails.subCategory}}</li>
+        <li class="list-group-item"><strong>Phone Number : </strong>{{accountDetails.phoneNumber}}</li>
+        <li class="list-group-item"><strong>Birth Date : </strong>{{accountDetails.birthDate}}</li>
         </ul>
     </div>
     }
