@@ -4,6 +4,8 @@
 
 namespace ContactsWebApplication.Migrations
 {
+    //klasa konwertujaca klase z c# do sql
+
     /// <inheritdoc />
     public partial class DBMigration : Migration
     {

@@ -3,8 +3,9 @@ import { UserComponent } from './user/user.component';
 import { RegistrationComponent } from './user/registration/registration.component';
 import { LoginComponent } from './user/login/login.component';
 import { HomeComponent } from './home/home.component';
-//import { AuthGuard } from './auth/auth.guard';
 
+
+//klasa umozliwiajaca przekierowywanie uzytkownika na odpowiednie podstrony
 export const routes: Routes = [
     {
         path:'',
@@ -28,7 +29,6 @@ export const routes: Routes = [
     },
     {
         path:'home',
-        component: HomeComponent//,
-        //canActivate:[AuthGuard]
+        component: HomeComponent
     }
 ];

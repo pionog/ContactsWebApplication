@@ -11,6 +11,7 @@ export class UserService {
 
   constructor(private fb:FormBuilder, private http:HttpClient) { }
 
+  //definiowanie formularza
   formModel = this.fb.group(
     {
       Name: [''],
@@ -27,6 +28,7 @@ export class UserService {
     }
   )
 
+  //funkcja sprawdzajaca hasla w formularzu
   comparePasswords(fb: FormGroup) {
     let confirmPswrdCtrl = fb.get('ConfirmPassword');
     if (confirmPswrdCtrl?.errors == null || 'passwordMismatch' in confirmPswrdCtrl.errors) {
@@ -37,6 +39,7 @@ export class UserService {
     }
   }
 
+  //przepisywanie danych z formularza do wiadomosci wysylanej metoda POST
   register() {
     var body = {
       accountID: 0,
@@ -52,6 +55,7 @@ export class UserService {
     return this.http.post(environment.apiBaseUrl + '/AccountDetail/Registration', body);
   }
 
+  //ustawianie tokena w localstorage po wyslaniu wiadomosci metoda POST
   login(formData: any) {
     return this.http.post(environment.apiBaseUrl + '/AccountDetail/Login', formData).pipe(
       tap((res: any) => {
@@ -60,6 +64,7 @@ export class UserService {
     );
   }
 
+  //uzyskiwanie danych o koncie
   getAccountDetail(): Observable<any> {
     return this.http.get(environment.apiBaseUrl + '/UserProfile/GetAccountDetail', {
       headers: {

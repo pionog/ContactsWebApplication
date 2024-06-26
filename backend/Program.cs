@@ -20,6 +20,8 @@ builder.Services.Configure<ApplicationSettings>(builder.Configuration.GetSection
 
 var key = Encoding.UTF8.GetBytes(builder.Configuration["ApplicationSettings:JWT_Secret"].ToString());
 
+
+//umozliwienie korzystania z uwierzytelniania jwt
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -38,9 +40,11 @@ builder.Services.AddAuthentication(x =>
     };
 });
 
+//przypisanie ustawien z aplikacji do programu
 builder.Services.Configure<ApplicationSettings>(builder.Configuration.GetSection("ApplicationSettings"));
 builder.Services.AddScoped<IAuthService, AuthService>();
 
+//polaczenie z baza danych
 builder.Services.AddDbContext<AccountDetailContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection")));
 
@@ -53,6 +57,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+//ustawienie polityki CORS w taki sposob, by mozna bylo korzystac z api przez frontend
 app.UseCors(options =>
                 options.WithOrigins("http://localhost:4200")
                 .AllowAnyMethod()

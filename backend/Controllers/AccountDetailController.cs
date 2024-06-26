@@ -15,13 +15,16 @@ using Microsoft.Extensions.Options;
 
 namespace ContactsWebApplication.Controllers
 {
+    //kontroler ktory umozliwia odpowiednie przekierowania na podstrony i wykorzystywanie prawidlowych metod takich jak GET czy POST
+
+
     [Route("api/[controller]")]
     [ApiController]
     public class AccountDetailController : ControllerBase
     {
-        private readonly AccountDetailContext _context;
-        private readonly IPasswordHasher<AccountDetail> _passwordHasher;
-        private readonly ApplicationSettings _appSettings;
+        private readonly AccountDetailContext _context; //korzystanie z informacji o danych z konta
+        private readonly IPasswordHasher<AccountDetail> _passwordHasher; //korzystanie z funkcji hashujacaej hasla
+        private readonly ApplicationSettings _appSettings; //korzystanie z ustawien aplikacji (tajny klucz jwt)
 
         public AccountDetailController(AccountDetailContext context, IPasswordHasher<AccountDetail> passwordHasher, IOptions<ApplicationSettings> appSettings)
         {
@@ -88,11 +91,11 @@ namespace ContactsWebApplication.Controllers
         [Route("Registration")]
         public async Task<ActionResult<AccountDetail>> PostAccountDetail(AccountDetail accountDetail)
         {
-            accountDetail.Password = _passwordHasher.HashPassword(accountDetail, accountDetail.Password);
-            _context.AccountDetails.Add(accountDetail);
-            await _context.SaveChangesAsync();
+            accountDetail.Password = _passwordHasher.HashPassword(accountDetail, accountDetail.Password); //ustawienie zahashowanego hasla do objektu konta
+            _context.AccountDetails.Add(accountDetail); //dodawanie nowego konta do bazy danych
+            await _context.SaveChangesAsync(); //zapisanie tego dodania
 
-            return CreatedAtAction("GetAccountDetail", new { id = accountDetail.AccountID }, accountDetail);
+            return CreatedAtAction("GetAccountDetail", new { id = accountDetail.AccountID }, accountDetail); //zwrocenie informacji, jakie zapisal serwer
         }
 
         [HttpPost]
@@ -100,7 +103,7 @@ namespace ContactsWebApplication.Controllers
         public async Task<IActionResult> Login(LoginModel loginModel)
         {
 
-            // find user
+            //szukanie uzytkownika po jego emailu
             var user = await _context.AccountDetails.FirstOrDefaultAsync(u => u.Email == loginModel.Email);
 
             if (user == null)
@@ -108,7 +111,7 @@ namespace ContactsWebApplication.Controllers
                 return BadRequest(new { message = "Brak użytkownika." });
             }
 
-            // user was found. check the password
+            //sprawdzanie hasha hasla
             var passwordVerificationResult = _passwordHasher.VerifyHashedPassword(user, user.Password, loginModel.Password);
 
             if (passwordVerificationResult == PasswordVerificationResult.Failed)
@@ -116,23 +119,21 @@ namespace ContactsWebApplication.Controllers
                 return BadRequest(new { message = "Niepoprawne hasło." });
             }
 
-            // password was correct. you have user's details
+            //prawidlowy uzytkownik, tworzenie opisu tokenu uwierzytelniajacego
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity([
-                        new Claim("AccountID",user.AccountID.ToString()),
-                        new Claim("Email", user.Email.ToString())
+                        new Claim("AccountID",user.AccountID.ToString()), //zawarcie informacji o id konta w tokenie
+                        new Claim("Email", user.Email.ToString()) //zawarcie informacji o emailu w tokenie
                     ]),
-                Expires = DateTime.UtcNow.AddDays(1),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.JWT_Secret)), SecurityAlgorithms.HmacSha256Signature)
+                Expires = DateTime.UtcNow.AddDays(1), //ustawienie waznosci tokena na jeden dzien
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.JWT_Secret)), SecurityAlgorithms.HmacSha256Signature) //wykorzystanie tajnego klucza z appsettings
             };
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var securityToken = tokenHandler.CreateToken(tokenDescriptor);
-            var token = tokenHandler.WriteToken(securityToken);
+            var tokenHandler = new JwtSecurityTokenHandler(); //tworzenie zmiennej obslugujacej token
+            var securityToken = tokenHandler.CreateToken(tokenDescriptor); //tworzenie wlasciwego tokena
+            var token = tokenHandler.WriteToken(securityToken); //zmienna przechowujaca token w prawidlowym formacie
             return Ok(new { token });
-
-            return Ok(new { message = "Pomyślne logowanie." });
         }
 
         // DELETE: api/AccountDetail/5

@@ -18,9 +18,9 @@ public interface IAuthService
 
 public class AuthService : IAuthService
 {
-    private readonly AccountDetailContext _context;
-    private readonly ApplicationSettings _appSettings;
-    private readonly IPasswordHasher<AccountDetail> _passwordHasher;
+    private readonly AccountDetailContext _context; //odwolanie do bazy danych
+    private readonly ApplicationSettings _appSettings; //korzystanie z ustawien aplikacji
+    private readonly IPasswordHasher<AccountDetail> _passwordHasher; //korzystanie z hashowania hasel
 
     public AuthService(AccountDetailContext context, IOptions<ApplicationSettings> appSettings, IPasswordHasher<AccountDetail> passwordHasher)
     {
@@ -31,13 +31,14 @@ public class AuthService : IAuthService
 
     public async Task<string> Authenticate(string email, string password)
     {
-        var user = await _context.AccountDetails.FirstOrDefaultAsync(u => u.Email == email);
+        var user = await _context.AccountDetails.FirstOrDefaultAsync(u => u.Email == email); //szukanie uzytkownika po emailu
 
         if (user == null || _passwordHasher.VerifyHashedPassword(user, user.Password, password) == PasswordVerificationResult.Failed)
         {
             return null;
         }
 
+        //tworzenie tokena jwt
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(_appSettings.JWT_Secret);
         var tokenDescriptor = new SecurityTokenDescriptor
@@ -57,6 +58,6 @@ public class AuthService : IAuthService
 
     public async Task<AccountDetail> GetAccountDetail(string email)
     {
-        return await _context.AccountDetails.FirstOrDefaultAsync(u => u.Email == email);
+        return await _context.AccountDetails.FirstOrDefaultAsync(u => u.Email == email); //szukanie w bazie danych uzytkownika po emailu
     }
 }

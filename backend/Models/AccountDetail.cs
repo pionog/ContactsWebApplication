@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ContactsWebApplication.Models
 {
+
+    // klasa przechowujaca pelne dane odnosnie konta uzytkownika
     public class AccountDetail
     {
         [Key]

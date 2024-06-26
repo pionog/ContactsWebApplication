@@ -1,8 +1,12 @@
-<nav class="navbar navbar-dark bg-dark">
-    <a class="navbar-brand text-white">JWT Auth System</a>
-    <button class="btn btn-danger my-2 my-sm-0" (click)="onLogout()">Logout</button>
+<nav class="navbar">
+    <h2 routerLink='/home' routerLinkActive='active'>Home</h2>
+    <h2 routerLink='/user/login' routerLinkActive='active'>Sign In</h2>
+    <h2 routerLink='/user/registration' routerLinkActive='active'>Sign Up</h2>
 </nav>
   @if(accountDetails){
+    <nav>
+        <button class="btn btn-danger" (click)="onLogout()">Logout</button>
+    </nav>
     <div class="card m-5" style="width:18rem">
         <ul class="list-group">
         <li class="list-group-item"><strong>Name : </strong>{{accountDetails.name}}</li>
