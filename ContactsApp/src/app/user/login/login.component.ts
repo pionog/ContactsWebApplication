@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../shared/user.service';
 import { FormsModule, NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -9,18 +10,24 @@ import { FormsModule, NgForm } from '@angular/forms';
   templateUrl: './login.component.html',
   styles: ``
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit{
   formModel = {
     Email: '',
     Password: ''
   }
   
-  constructor(private service: UserService) { }
+  constructor(private service: UserService, private router: Router) { }
+
+  ngOnInit() {
+    if (localStorage.getItem('token') != null)
+      this.router.navigateByUrl('/home');
+  }
 
   onSubmit(form: NgForm) {
     this.service.login(form.value).subscribe(
       (res: any) => {
         localStorage.setItem('token', res.token);
+        this.router.navigateByUrl('/home');
       },
       err => {
         console.log(err);

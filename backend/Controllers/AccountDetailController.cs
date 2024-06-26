@@ -121,7 +121,7 @@ namespace ContactsWebApplication.Controllers
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity([
-                        new Claim("UserID",user.AccountID.ToString())
+                        new Claim("AccountID",user.AccountID.ToString())
                     ]),
                 Expires = DateTime.UtcNow.AddDays(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.JWT_Secret)), SecurityAlgorithms.HmacSha256Signature)
